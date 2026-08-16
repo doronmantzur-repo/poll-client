@@ -1,10 +1,16 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import * as pollsApi from "../api/pollsApi";
+import * as pollAnswersApi from "../api/pollAnswersApi";
 
 class PollStore {
   polls = [];
   loading = false;
   error = null;
+
+  browsePolls = [];
+  browseLoading = false;
+  browseError = null;
+  voteError = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -47,6 +53,44 @@ class PollStore {
       runInAction(() => {
         this.loading = false;
       });
+    }
+  }
+
+  async fetchBrowsePolls(userId) {
+    this.browseLoading = true;
+    this.browseError = null;
+    try {
+      const { polls } = await pollsApi.getBrowsePolls(userId);
+      runInAction(() => {
+        this.browsePolls = polls;
+      });
+    } catch (err) {
+      runInAction(() => {
+        this.browseError = err.message;
+      });
+    } finally {
+      runInAction(() => {
+        this.browseLoading = false;
+      });
+    }
+  }
+
+  async submitAnswers(pollId, userId, answers) {
+    this.voteError = null;
+    try {
+      await pollAnswersApi.submitAnswers(pollId, userId, answers);
+      runInAction(() => {
+        const poll = this.browsePolls.find((p) => p.id === pollId);
+        if (poll) {
+          poll.my_answers = answers;
+        }
+      });
+      return true;
+    } catch (err) {
+      runInAction(() => {
+        this.voteError = err.message;
+      });
+      return false;
     }
   }
 }
