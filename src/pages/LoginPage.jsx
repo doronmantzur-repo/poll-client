@@ -29,7 +29,10 @@ function LoginPage() {
           id="user_name"
           type="text"
           value={userName}
-          onChange={(e) => setUserName(e.target.value)}
+          onChange={(e) => {
+            setUserName(e.target.value);
+            authStore.clearError();
+          }}
           required
         />
 
@@ -38,7 +41,10 @@ function LoginPage() {
           id="password"
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            authStore.clearError();
+          }}
           required
         />
 

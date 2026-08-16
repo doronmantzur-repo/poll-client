@@ -60,6 +60,10 @@ class AuthStore {
     this.user = null;
     this.error = null;
   }
+
+  clearError() {
+    this.error = null;
+  }
 }
 
 const authStore = new AuthStore();

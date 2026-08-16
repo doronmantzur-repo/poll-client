@@ -3,14 +3,24 @@ import { observer } from "mobx-react-lite";
 import { Link, useNavigate } from "react-router-dom";
 import authStore from "../stores/AuthStore";
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function SignupPage() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [formError, setFormError] = useState(null);
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const success = await authStore.signup(userName, password);
+
+    if (!EMAIL_PATTERN.test(userName.trim())) {
+      setFormError("Please enter a valid email address.");
+      return;
+    }
+    setFormError(null);
+
+    const success = await authStore.signup(userName.trim(), password);
     if (success) {
       navigate("/");
     }
@@ -20,12 +30,16 @@ function SignupPage() {
     <div className="auth-page">
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="user_name">Username</label>
+        <label htmlFor="user_name">Email</label>
         <input
           id="user_name"
-          type="text"
+          type="email"
           value={userName}
-          onChange={(e) => setUserName(e.target.value)}
+          onChange={(e) => {
+            setUserName(e.target.value);
+            setFormError(null);
+            authStore.clearError();
+          }}
           required
         />
 
@@ -34,10 +48,14 @@ function SignupPage() {
           id="password"
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            authStore.clearError();
+          }}
           required
         />
 
+        {formError && <p className="error">{formError}</p>}
         {authStore.error && <p className="error">{authStore.error}</p>}
 
         <button type="submit" disabled={authStore.loading}>
