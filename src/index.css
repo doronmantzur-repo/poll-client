@@ -213,3 +213,45 @@ body {
   font-weight: 600;
   margin-top: 0.5rem;
 }
+
+.result-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.6rem 0 0;
+}
+
+.result-row {
+  display: grid;
+  grid-template-columns: minmax(0, 110px) 1fr 64px;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.45rem;
+  font-size: 0.85rem;
+}
+
+.result-label {
+  color: #52514e;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result-track {
+  background: #cde2fb;
+  border-radius: 4px;
+  height: 12px;
+  overflow: hidden;
+}
+
+.result-fill {
+  background: #2a78d6;
+  height: 100%;
+  border-radius: 0 4px 4px 0;
+  transition: width 0.3s ease;
+}
+
+.result-value {
+  color: #52514e;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

@@ -12,6 +12,10 @@ class PollStore {
   browseError = null;
   voteError = null;
 
+  resultsPolls = [];
+  resultsLoading = false;
+  resultsError = null;
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -91,6 +95,25 @@ class PollStore {
         this.voteError = err.message;
       });
       return false;
+    }
+  }
+
+  async fetchResults() {
+    this.resultsLoading = true;
+    this.resultsError = null;
+    try {
+      const { polls } = await pollsApi.getPublicResults();
+      runInAction(() => {
+        this.resultsPolls = polls;
+      });
+    } catch (err) {
+      runInAction(() => {
+        this.resultsError = err.message;
+      });
+    } finally {
+      runInAction(() => {
+        this.resultsLoading = false;
+      });
     }
   }
 }

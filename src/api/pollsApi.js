@@ -22,6 +22,17 @@ export async function getBrowsePolls(userId) {
   return data;
 }
 
+export async function getPublicResults() {
+  const response = await fetch(`${API_BASE_URL}/api/polls/results`);
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Request failed");
+  }
+
+  return data;
+}
+
 export async function createPoll(question, answers, isPublic, userId) {
   const response = await fetch(`${API_BASE_URL}/api/polls`, {
     method: "POST",

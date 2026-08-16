@@ -16,6 +16,9 @@ function HomePage() {
       <p>
         <Link to="/vote">Vote on Polls</Link>
       </p>
+      <p>
+        <Link to="/results">Public Poll Results</Link>
+      </p>
       <button onClick={() => authStore.logout()}>Log out</button>
     </div>
   );
