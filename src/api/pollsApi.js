@@ -33,6 +33,20 @@ export async function getPublicResults() {
   return data;
 }
 
+export async function getPollById(pollId, userId) {
+  const url = userId
+    ? `${API_BASE_URL}/api/polls/${pollId}?user_id=${userId}`
+    : `${API_BASE_URL}/api/polls/${pollId}`;
+  const response = await fetch(url);
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Request failed");
+  }
+
+  return data;
+}
+
 export async function publishPoll(pollId, userId) {
   const response = await fetch(`${API_BASE_URL}/api/polls/${pollId}/publish`, {
     method: "PATCH",

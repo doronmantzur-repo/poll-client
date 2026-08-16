@@ -1,24 +1,28 @@
 import { useState } from "react";
 import { observer } from "mobx-react-lite";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import authStore from "../stores/AuthStore";
 
 function LoginPage() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectMessage = location.state?.message;
+  const redirectTo = location.state?.from || "/";
 
   async function handleSubmit(e) {
     e.preventDefault();
     const success = await authStore.login(userName, password);
     if (success) {
-      navigate("/");
+      navigate(redirectTo);
     }
   }
 
   return (
     <div className="auth-page">
       <h1>Log In</h1>
+      {redirectMessage && <p className="info">{redirectMessage}</p>}
       <form onSubmit={handleSubmit}>
         <label htmlFor="user_name">Username</label>
         <input

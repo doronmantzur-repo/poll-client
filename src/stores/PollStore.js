@@ -16,6 +16,10 @@ class PollStore {
   resultsLoading = false;
   resultsError = null;
 
+  selectedPoll = null;
+  selectedPollLoading = false;
+  selectedPollError = null;
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -142,6 +146,9 @@ class PollStore {
         if (poll) {
           poll.my_answers = [answer];
         }
+        if (this.selectedPoll && this.selectedPoll.id === pollId) {
+          this.selectedPoll.my_answers = [answer];
+        }
       });
       return true;
     } catch (err) {
@@ -149,6 +156,26 @@ class PollStore {
         this.voteError = err.message;
       });
       return false;
+    }
+  }
+
+  async fetchPollById(pollId, userId) {
+    this.selectedPollLoading = true;
+    this.selectedPollError = null;
+    this.selectedPoll = null;
+    try {
+      const { poll } = await pollsApi.getPollById(pollId, userId);
+      runInAction(() => {
+        this.selectedPoll = poll;
+      });
+    } catch (err) {
+      runInAction(() => {
+        this.selectedPollError = err.message;
+      });
+    } finally {
+      runInAction(() => {
+        this.selectedPollLoading = false;
+      });
     }
   }
 

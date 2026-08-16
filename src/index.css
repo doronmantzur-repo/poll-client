@@ -60,6 +60,15 @@ body {
   font-size: 0.85rem;
 }
 
+.info {
+  color: #1c5cab;
+  background: #eef4ff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
 .polls-page {
   background: white;
   padding: 2rem;

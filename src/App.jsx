@@ -5,6 +5,7 @@ import SignupPage from "./pages/SignupPage";
 import PollsPage from "./pages/PollsPage";
 import VotePage from "./pages/VotePage";
 import ResultsPage from "./pages/ResultsPage";
+import PollDetailPage from "./pages/PollDetailPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/polls" element={<PollsPage />} />
         <Route path="/vote" element={<VotePage />} />
         <Route path="/results" element={<ResultsPage />} />
+        <Route path="/polls/:id" element={<PollDetailPage />} />
       </Routes>
     </BrowserRouter>
   );
