@@ -4,11 +4,9 @@ function PollResultCard({ poll }) {
   return (
     <li className="poll-card">
       <h2>{question}</h2>
-      <span className="poll-visibility">
-        {voterCount === 0
-          ? "No votes yet"
-          : `${voterCount} voter${voterCount === 1 ? "" : "s"}`}
-      </span>
+      <p className="result-total">
+        Total votes: <strong>{voterCount}</strong>
+      </p>
 
       <ul className="result-list">
         {options.map(({ answer, count }) => {
@@ -20,7 +18,7 @@ function PollResultCard({ poll }) {
                 <div className="result-fill" style={{ width: `${percent}%` }} />
               </div>
               <div className="result-value">
-                {count} ({percent}%)
+                {count} vote{count === 1 ? "" : "s"} ({percent}%)
               </div>
             </li>
           );

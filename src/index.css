@@ -226,6 +226,12 @@ body {
   margin-top: 0.5rem;
 }
 
+.result-total {
+  font-size: 0.85rem;
+  color: #52514e;
+  margin: 0.3rem 0 0;
+}
+
 .result-list {
   list-style: none;
   padding: 0;
@@ -234,7 +240,7 @@ body {
 
 .result-row {
   display: grid;
-  grid-template-columns: minmax(0, 110px) 1fr 64px;
+  grid-template-columns: minmax(0, 110px) 1fr 100px;
   align-items: center;
   gap: 0.6rem;
   margin-top: 0.45rem;
