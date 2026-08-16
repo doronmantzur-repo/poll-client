@@ -98,14 +98,14 @@ class PollStore {
     }
   }
 
-  async submitAnswers(pollId, userId, answers) {
+  async submitAnswer(pollId, userId, answer) {
     this.voteError = null;
     try {
-      await pollAnswersApi.submitAnswers(pollId, userId, answers);
+      await pollAnswersApi.submitAnswer(pollId, userId, answer);
       runInAction(() => {
         const poll = this.browsePolls.find((p) => p.id === pollId);
         if (poll) {
-          poll.my_answers = answers;
+          poll.my_answers = [answer];
         }
       });
       return true;

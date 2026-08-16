@@ -1,10 +1,10 @@
 import { API_BASE_URL } from "./config";
 
-export async function submitAnswers(pollId, userId, answers) {
+export async function submitAnswer(pollId, userId, answer) {
   const response = await fetch(`${API_BASE_URL}/api/poll-answers`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ poll_id: pollId, user_id: userId, answers }),
+    body: JSON.stringify({ poll_id: pollId, user_id: userId, answer }),
   });
 
   const data = await response.json();

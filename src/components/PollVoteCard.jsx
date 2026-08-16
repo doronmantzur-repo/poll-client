@@ -4,7 +4,7 @@ import authStore from "../stores/AuthStore";
 import pollStore from "../stores/PollStore";
 
 function PollVoteCard({ poll }) {
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
   const answers = Array.from({ length: 8 }, (_, i) => poll[`answer_${i + 1}`]).filter(Boolean);
@@ -12,17 +12,11 @@ function PollVoteCard({ poll }) {
   const hasVoted = myAnswers.length > 0;
   const isOwnPoll = poll.user_id === authStore.user.id;
 
-  function toggleAnswer(answer) {
-    setSelected((prev) =>
-      prev.includes(answer) ? prev.filter((a) => a !== answer) : [...prev, answer]
-    );
-  }
-
   async function handleVote(e) {
     e.preventDefault();
-    if (selected.length === 0) return;
+    if (!selected) return;
     setSubmitting(true);
-    await pollStore.submitAnswers(poll.id, authStore.user.id, selected);
+    await pollStore.submitAnswer(poll.id, authStore.user.id, selected);
     setSubmitting(false);
   }
 
@@ -41,14 +35,15 @@ function PollVoteCard({ poll }) {
           {answers.map((answer, i) => (
             <label key={i} className="vote-option">
               <input
-                type="checkbox"
-                checked={selected.includes(answer)}
-                onChange={() => toggleAnswer(answer)}
+                type="radio"
+                name={`poll-${poll.id}`}
+                checked={selected === answer}
+                onChange={() => setSelected(answer)}
               />
               {answer}
             </label>
           ))}
-          <button type="submit" disabled={selected.length === 0 || submitting}>
+          <button type="submit" disabled={!selected || submitting}>
             {submitting ? "Submitting..." : "Submit Vote"}
           </button>
         </form>
