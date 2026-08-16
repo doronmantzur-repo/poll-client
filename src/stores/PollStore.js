@@ -60,6 +60,25 @@ class PollStore {
     }
   }
 
+  async publishPoll(pollId, userId) {
+    this.error = null;
+    try {
+      const { poll } = await pollsApi.publishPoll(pollId, userId);
+      runInAction(() => {
+        const existing = this.polls.find((p) => p.id === pollId);
+        if (existing) {
+          existing.is_public = poll.is_public;
+        }
+      });
+      return true;
+    } catch (err) {
+      runInAction(() => {
+        this.error = err.message;
+      });
+      return false;
+    }
+  }
+
   async fetchBrowsePolls(userId) {
     this.browseLoading = true;
     this.browseError = null;

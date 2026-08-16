@@ -27,6 +27,7 @@ function PollsPage() {
 
       {showForm && <CreatePollForm onDone={() => setShowForm(false)} />}
 
+      {!showForm && pollStore.error && <p className="error">{pollStore.error}</p>}
       {pollStore.loading && !showForm && <p>Loading polls...</p>}
 
       {!pollStore.loading && pollStore.polls.length === 0 && (
@@ -38,10 +39,25 @@ function PollsPage() {
           const answers = Array.from({ length: 8 }, (_, i) => poll[`answer_${i + 1}`]).filter(
             Boolean
           );
+
+          async function handlePublish() {
+            const confirmed = window.confirm(
+              "Make this poll public? This cannot be undone — it will stay public permanently."
+            );
+            if (confirmed) {
+              await pollStore.publishPoll(poll.id, authStore.user.id);
+            }
+          }
+
           return (
             <li className="poll-card" key={poll.id}>
               <h2>{poll.question}</h2>
               <span className="poll-visibility">{poll.is_public ? "Public" : "Private"}</span>
+              {!poll.is_public && (
+                <button type="button" className="publish-button" onClick={handlePublish}>
+                  Make Public
+                </button>
+              )}
               <ul>
                 {answers.map((answer, i) => (
                   <li key={i}>{answer}</li>
