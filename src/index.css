@@ -59,3 +59,129 @@ body {
   color: #dc2626;
   font-size: 0.85rem;
 }
+
+.polls-page {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  width: 480px;
+}
+
+.polls-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.polls-header button {
+  padding: 0.5rem 0.9rem;
+  border: none;
+  border-radius: 4px;
+  background: #3b82f6;
+  color: white;
+  cursor: pointer;
+}
+
+.create-poll-form {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+}
+
+.create-poll-form label {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.create-poll-form input[type="text"] {
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.answer-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+  align-items: center;
+}
+
+.answer-row input {
+  flex: 1;
+}
+
+.answer-row button {
+  border: none;
+  background: #f3f4f6;
+  border-radius: 4px;
+  width: 1.8rem;
+  height: 1.8rem;
+  cursor: pointer;
+}
+
+.add-answer {
+  margin-top: 0.6rem;
+  align-self: flex-start;
+  border: none;
+  background: none;
+  color: #3b82f6;
+  cursor: pointer;
+  padding: 0;
+}
+
+.checkbox-label {
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.form-actions button {
+  padding: 0.5rem 0.9rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-actions button[type="submit"] {
+  background: #3b82f6;
+  color: white;
+}
+
+.poll-list {
+  list-style: none;
+  padding: 0;
+}
+
+.poll-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.poll-card h2 {
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.poll-visibility {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
