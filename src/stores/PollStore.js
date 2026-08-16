@@ -60,6 +60,41 @@ class PollStore {
     }
   }
 
+  async updatePoll(pollId, question, answers, userId) {
+    this.error = null;
+    try {
+      const { poll } = await pollsApi.updatePoll(pollId, question, answers, userId);
+      runInAction(() => {
+        const index = this.polls.findIndex((p) => p.id === pollId);
+        if (index !== -1) {
+          this.polls[index] = poll;
+        }
+      });
+      return true;
+    } catch (err) {
+      runInAction(() => {
+        this.error = err.message;
+      });
+      return false;
+    }
+  }
+
+  async deletePoll(pollId, userId) {
+    this.error = null;
+    try {
+      await pollsApi.deletePoll(pollId, userId);
+      runInAction(() => {
+        this.polls = this.polls.filter((p) => p.id !== pollId);
+      });
+      return true;
+    } catch (err) {
+      runInAction(() => {
+        this.error = err.message;
+      });
+      return false;
+    }
+  }
+
   async publishPoll(pollId, userId) {
     this.error = null;
     try {

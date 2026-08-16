@@ -6,9 +6,14 @@ import pollStore from "../stores/PollStore";
 const MAX_ANSWERS = 8;
 const MIN_ANSWERS = 2;
 
-function CreatePollForm({ onDone }) {
-  const [question, setQuestion] = useState("");
-  const [answers, setAnswers] = useState(["", ""]);
+function CreatePollForm({ onDone, poll }) {
+  const isEditing = Boolean(poll);
+  const initialAnswers = isEditing
+    ? Array.from({ length: 8 }, (_, i) => poll[`answer_${i + 1}`]).filter(Boolean)
+    : ["", ""];
+
+  const [question, setQuestion] = useState(isEditing ? poll.question : "");
+  const [answers, setAnswers] = useState(initialAnswers);
   const [isPublic, setIsPublic] = useState(true);
   const [formError, setFormError] = useState(null);
 
@@ -38,12 +43,10 @@ function CreatePollForm({ onDone }) {
     }
     setFormError(null);
 
-    const success = await pollStore.createPoll(
-      question,
-      nonEmptyAnswers,
-      isPublic,
-      authStore.user.id
-    );
+    const success = isEditing
+      ? await pollStore.updatePoll(poll.id, question, nonEmptyAnswers, authStore.user.id)
+      : await pollStore.createPoll(question, nonEmptyAnswers, isPublic, authStore.user.id);
+
     if (success) {
       onDone();
     }
@@ -84,14 +87,16 @@ function CreatePollForm({ onDone }) {
         </button>
       )}
 
-      <label className="checkbox-label">
-        <input
-          type="checkbox"
-          checked={isPublic}
-          onChange={(e) => setIsPublic(e.target.checked)}
-        />
-        Public poll
-      </label>
+      {!isEditing && (
+        <label className="checkbox-label">
+          <input
+            type="checkbox"
+            checked={isPublic}
+            onChange={(e) => setIsPublic(e.target.checked)}
+          />
+          Public poll
+        </label>
+      )}
 
       {formError && <p className="error">{formError}</p>}
       {pollStore.error && <p className="error">{pollStore.error}</p>}
@@ -101,7 +106,7 @@ function CreatePollForm({ onDone }) {
           Cancel
         </button>
         <button type="submit" disabled={pollStore.loading}>
-          {pollStore.loading ? "Creating..." : "Create Poll"}
+          {pollStore.loading ? "Saving..." : isEditing ? "Save Changes" : "Create Poll"}
         </button>
       </div>
     </form>

@@ -7,6 +7,7 @@ import CreatePollForm from "../components/CreatePollForm";
 
 function PollsPage() {
   const [showForm, setShowForm] = useState(false);
+  const [editingPoll, setEditingPoll] = useState(null);
 
   useEffect(() => {
     if (authStore.isAuthenticated) {
@@ -22,13 +23,23 @@ function PollsPage() {
     <div className="polls-page">
       <div className="polls-header">
         <h1>My Polls</h1>
-        <button onClick={() => setShowForm(true)}>+ Create Poll</button>
+        <button
+          onClick={() => {
+            setEditingPoll(null);
+            setShowForm(true);
+          }}
+        >
+          + Create Poll
+        </button>
       </div>
 
-      {showForm && <CreatePollForm onDone={() => setShowForm(false)} />}
+      {showForm && !editingPoll && <CreatePollForm onDone={() => setShowForm(false)} />}
+      {editingPoll && (
+        <CreatePollForm poll={editingPoll} onDone={() => setEditingPoll(null)} />
+      )}
 
-      {!showForm && pollStore.error && <p className="error">{pollStore.error}</p>}
-      {pollStore.loading && !showForm && <p>Loading polls...</p>}
+      {!showForm && !editingPoll && pollStore.error && <p className="error">{pollStore.error}</p>}
+      {pollStore.loading && !showForm && !editingPoll && <p>Loading polls...</p>}
 
       {!pollStore.loading && pollStore.polls.length === 0 && (
         <p>You haven't created any polls yet.</p>
@@ -49,14 +60,34 @@ function PollsPage() {
             }
           }
 
+          function handleEdit() {
+            setShowForm(false);
+            setEditingPoll(poll);
+          }
+
+          async function handleDelete() {
+            const confirmed = window.confirm("Delete this poll? This cannot be undone.");
+            if (confirmed) {
+              await pollStore.deletePoll(poll.id, authStore.user.id);
+            }
+          }
+
           return (
             <li className="poll-card" key={poll.id}>
               <h2>{poll.question}</h2>
               <span className="poll-visibility">{poll.is_public ? "Public" : "Private"}</span>
               {!poll.is_public && (
-                <button type="button" className="publish-button" onClick={handlePublish}>
-                  Make Public
-                </button>
+                <div className="poll-card-actions">
+                  <button type="button" className="publish-button" onClick={handlePublish}>
+                    Make Public
+                  </button>
+                  <button type="button" onClick={handleEdit}>
+                    Edit
+                  </button>
+                  <button type="button" onClick={handleDelete}>
+                    Delete
+                  </button>
+                </div>
               )}
               <ul>
                 {answers.map((answer, i) => (
