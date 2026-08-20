@@ -6,10 +6,12 @@ import PollsPage from "./pages/PollsPage";
 import VotePage from "./pages/VotePage";
 import ResultsPage from "./pages/ResultsPage";
 import PollDetailPage from "./pages/PollDetailPage";
+import UserMenu from "./components/UserMenu";
 
 function App() {
   return (
     <BrowserRouter>
+      <UserMenu />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
