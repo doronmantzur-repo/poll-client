@@ -1,8 +1,19 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import * as authApi from "../api/authApi";
 
+const STORAGE_KEY = "poll_app_user";
+
+function loadStoredUser() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
 class AuthStore {
-  user = null;
+  user = loadStoredUser();
   loading = false;
   error = null;
 
@@ -22,6 +33,7 @@ class AuthStore {
       runInAction(() => {
         this.user = user;
       });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
       return true;
     } catch (err) {
       runInAction(() => {
@@ -43,6 +55,7 @@ class AuthStore {
       runInAction(() => {
         this.user = user;
       });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
       return true;
     } catch (err) {
       runInAction(() => {
@@ -59,6 +72,7 @@ class AuthStore {
   logout() {
     this.user = null;
     this.error = null;
+    localStorage.removeItem(STORAGE_KEY);
   }
 
   clearError() {
