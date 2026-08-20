@@ -59,6 +59,7 @@ function SignupPage() {
         {authStore.error && <p className="error">{authStore.error}</p>}
 
         <button type="submit" disabled={authStore.loading}>
+          {authStore.loading && <span className="spinner" />}
           {authStore.loading ? "Signing up..." : "Sign Up"}
         </button>
       </form>

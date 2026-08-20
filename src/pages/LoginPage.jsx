@@ -51,6 +51,7 @@ function LoginPage() {
         {authStore.error && <p className="error">{authStore.error}</p>}
 
         <button type="submit" disabled={authStore.loading}>
+          {authStore.loading && <span className="spinner" />}
           {authStore.loading ? "Logging in..." : "Log In"}
         </button>
       </form>
