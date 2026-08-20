@@ -7,9 +7,12 @@ function HomePage() {
     return <Navigate to="/login" replace />;
   }
 
+  const namePart = authStore.user.user_name.split("@")[0];
+  const displayName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+
   return (
     <div className="auth-page">
-      <h1>Welcome, {authStore.user.user_name}!</h1>
+      <h1>Welcome, {displayName}!</h1>
       <p>
         <Link to="/polls">My Polls</Link>
       </p>
